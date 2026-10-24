@@ -8,6 +8,16 @@
 - Put individual model prototypes under `prototyping/`.
 - Put reusable dataset loaders under `dataloaders/` so experiments use consistent loading and evaluation behavior.
 
+## Repository context
+
+- Read `README.md` for repository orientation.
+- Read `docs/README.md` for the documentation map, ownership boundaries, and update rules.
+- For Task 1 work, read `docs/competition/task-1.md` and check `docs/competition/ambiguities.md` for unresolved questions.
+- Use `docs/competition/source-register.md` to verify the version and provenance of competition information.
+- Follow `docs/experiments/README.md` when a run produces evidence worth preserving.
+- Follow `docs/datasets/README.md` before adding or using a dataset.
+- Record consequential, durable technical decisions using `docs/decisions/README.md`.
+
 ## Sources of truth
 
 Use the following order when sources disagree:
@@ -48,6 +58,20 @@ For a meaningful training or evaluation run, preserve enough information for ano
 Distinguish a valid negative result from a failed or invalid run. Avoid data leakage, and report the metrics and evaluation slices relevant to the stated objective.
 
 Do not commit large datasets, flight recordings, trained weights, generated outputs, credentials, or secrets unless the repository explicitly adopts a suitable storage policy for them.
+
+## Knowledge maintenance
+
+Before handoff, update the appropriate canonical file when the work produced information whose omission could cause repeated work, a different technical decision, an incorrect competition assumption, or an irreproducible result. Follow the detailed routing and update rules in `docs/README.md`.
+
+- New or revised official competition source: update `docs/competition/source-register.md`; never edit a preserved source file.
+- Competition requirement or reviewed Task 1 implication: update `docs/competition/task-1.md`.
+- Unresolved or resolved competition question: update `docs/competition/ambiguities.md` and link its evidence.
+- Dataset provenance, license, quality, split, or suitability finding: update `docs/datasets/README.md`.
+- Meaningful experiment, including a useful negative or inconclusive result: add a summary under `docs/experiments/summaries/`.
+- Consequential technical decision: add or supersede a record under `docs/decisions/`.
+- Repository workflow or contributor expectation: update `README.md`, `CONTRIBUTING.md`, or `AGENTS.md`, according to the ownership described in `docs/README.md`.
+
+Do not record routine commands, transient errors, narration, or speculation with no future value. Link to canonical evidence instead of copying it. A GitHub Issue is not required before updating the knowledge base.
 
 ## Verification and handoff
 
