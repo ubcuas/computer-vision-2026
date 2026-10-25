@@ -4,7 +4,7 @@
     "drive_workspace": "MyDrive/Gurnek_GFL_Research/workspace",
     "drive_runs": "MyDrive/Gurnek_GFL_Research/runs",
     "final_checkpoint_index": "runs/complete.json",
-    "observed_status": "2026-10-25: first LR trial, epoch 1, batch 140/328; full experiment incomplete",
+    "observed_status": "Paused by Gurnek on 2026-10-25. Two LR trials completed; third partially run. No final source fit/adaptation/comparison completed.",
     "runtime_code": "Original deer_research snapshot, not the reorganized repository package"
   },
   "baseline": {
@@ -13,6 +13,7 @@
     "initialization": "official COCO; never use wildlife-trained or adapted weights",
     "shared_manifest": "prototyping/yolo-fine-tune/dataset/manifest.csv",
     "source_commit": "23c257eb884b05cf21043d5bbaef627c38e280cf",
-    "split": "211 train / 53 val; no test set"
+    "split": "211 train / 53 val; no test set",
+    "status": "Prepared but not launched; deferred pending team dataset, split, resolution and loading agreement."
   }
 }

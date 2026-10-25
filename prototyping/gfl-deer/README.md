@@ -1,5 +1,7 @@
 # Gurnek: research-derived GFL and exact-data decoy baseline
 
+**Paused by Gurnek, 2026-10-25.** Colab training abandoned in favour of team GPU compute after agreeing shared data, splits and camera resolution. Five-minute monitor deleted; do not auto-launch either experiment. Existing checkpoints/cached data remain in Drive.
+
 Two separate experiments; weights and datasets remain in external Drive storage. See `artifacts.json` for locations and `RESEARCH.md` for methodology and limitations. The live wildlife-data Colab run is not modified by this repository reorganization. `current_run_snapshot/` preserves the original executed package for provenance; the active package uses shared loaders under `dataloaders/deer_shared/`.
 
 ## Current wildlife-data experiment
