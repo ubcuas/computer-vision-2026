@@ -33,8 +33,31 @@ def train_retry(dataset,folder,model,lr,epochs,edge,initial=None,smoke=False):
         if initial and selected!=model:raise RuntimeError('Adaptation backbone fallback requires repeating pretraining with R50; checkpoint cannot be silently reused')
         attempt=folder/f'{selected}_{e}';attempt.mkdir(exist_ok=True)
         log=attempt/'console.log'
-        with open(log,'w') as out:
-            proc=subprocess.run(train_command(dataset,attempt,selected,lr,epochs,e,initial,smoke),stdout=out,stderr=subprocess.STDOUT,cwd=ROOT)
+        resume=None
+        if smoke and (attempt/'smoke_result.json').exists():
+            return attempt,selected,e
+        if not smoke:
+            import torch
+            candidates=list(attempt.glob('epoch_*.pth'))
+            if (attempt/'latest.pth').exists():candidates.append(attempt/'latest.pth')
+            saved=[]
+            for path in candidates:
+                # Refuse corrupt/incomplete checkpoints rather than restarting from COCO.
+                state=torch.load(path,map_location='cpu')
+                if 'optimizer' not in state:raise RuntimeError('No optimizer state in '+str(path))
+                saved.append((int(state.get('meta',{}).get('epoch',0)),path))
+                del state
+            if saved:
+                completed,resume=max(saved,key=lambda x:x[0])
+                from mmcv import Config
+                previous=Config.fromfile(str(attempt/'config.py'))
+                if previous.optimizer.lr!=lr or previous.model.bbox_head.num_classes!=1:
+                    raise RuntimeError('Resume configuration mismatch')
+                if completed>=epochs:
+                    return attempt,selected,e
+                write_json(attempt/'resume_event.json',dict(checkpoint=str(resume),completed_epochs=completed,target_epochs=epochs))
+        with open(log,'a') as out:
+            proc=subprocess.run(train_command(dataset,attempt,selected,lr,epochs,e,initial,smoke,resume),stdout=out,stderr=subprocess.STDOUT,cwd=ROOT)
         if proc.returncode==0:
             write_json(folder/'selected.json',dict(model=selected,long_edge=e,attempt=str(attempt),departure=selected!=model or e!=2650))
             return attempt,selected,e
