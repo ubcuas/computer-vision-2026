@@ -3,10 +3,11 @@ set -euo pipefail
 RESEARCH_ROOT="${DEER_WORKSPACE:?Set DEER_WORKSPACE to the cached external workspace}"
 python3 -m pip install -q uv==0.8.22
 python3 -m uv python install 3.10
-if [ ! -x /content/gfl-env/bin/python ]; then
-  python3 -m uv venv /content/gfl-env --python 3.10 --seed
+GFL_ENV="${GFL_ENV:-/content/gfl-env}"
+if [ ! -x "$GFL_ENV/bin/python" ]; then
+  python3 -m uv venv "$GFL_ENV" --python 3.10 --seed
 fi
-PY=/content/gfl-env/bin/python
+PY="$GFL_ENV/bin/python"
 "$PY" -m pip install -q setuptools==69.5.1 wheel==0.45.1 numpy==1.23.5
 "$PY" -m pip install -q torch==1.13.1+cu117 torchvision==0.14.1+cu117 --extra-index-url https://download.pytorch.org/whl/cu117
 "$PY" -m pip install -q mmcv-full==1.7.1 --only-binary mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu117/torch1.13.0/index.html
