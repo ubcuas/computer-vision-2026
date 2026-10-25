@@ -1,0 +1,18 @@
+{
+  "current_run": {
+    "notebook": "https://colab.research.google.com/drive/1EX586MOBp2doRofrx2FqHUbKo_Lfwa6C",
+    "drive_workspace": "MyDrive/Gurnek_GFL_Research/workspace",
+    "drive_runs": "MyDrive/Gurnek_GFL_Research/runs",
+    "final_checkpoint_index": "runs/complete.json",
+    "observed_status": "2026-10-25: first LR trial, epoch 1, batch 140/328; full experiment incomplete",
+    "runtime_code": "Original deer_research snapshot, not the reorganized repository package"
+  },
+  "baseline": {
+    "workspace": "same cached workspace; no source download required",
+    "drive_runs": "MyDrive/Gurnek_GFL_Research/decoy_matched_anant_v1",
+    "initialization": "official COCO; never use wildlife-trained or adapted weights",
+    "shared_manifest": "prototyping/yolo-fine-tune/dataset/manifest.csv",
+    "source_commit": "23c257eb884b05cf21043d5bbaef627c38e280cf",
+    "split": "211 train / 53 val; no test set"
+  }
+}

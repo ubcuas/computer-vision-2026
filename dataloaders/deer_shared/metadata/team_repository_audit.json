@@ -1,0 +1,43 @@
+{
+  "repository": "https://github.com/ubcuas/computer-vision-2026",
+  "reviewed_refs": {
+    "deer-yolo-dataset": "23c257eb884b05cf21043d5bbaef627c38e280cf",
+    "ai-setup": "7506547ed9c80adf6d8f4783a8bf2bbc447a5b8c"
+  },
+  "ai_agents_branch_found": false,
+  "split_overlap": [
+    {
+      "gfl_split": "test",
+      "yolo_split": "train",
+      "images": 33
+    },
+    {
+      "gfl_split": "test",
+      "yolo_split": "val",
+      "images": 6
+    },
+    {
+      "gfl_split": "train",
+      "yolo_split": "train",
+      "images": 149
+    },
+    {
+      "gfl_split": "train",
+      "yolo_split": "val",
+      "images": 35
+    },
+    {
+      "gfl_split": "val",
+      "yolo_split": "train",
+      "images": 29
+    },
+    {
+      "gfl_split": "val",
+      "yolo_split": "val",
+      "images": 11
+    }
+  ],
+  "yolo_committed_weights_found": false,
+  "yolo_committed_measured_results_found": false,
+  "conclusion": "Existing decoy partitions cannot provide a common untouched test for existing models; 33 of 39 GFL test images were YOLO training images. Use newly collected held-out decoy data for existing checkpoints, or retrain final decoy stages on one agreed grouped split. Shared split and annotation adoption remains a proposal for team review."
+}

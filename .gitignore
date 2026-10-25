@@ -1,0 +1,11 @@
+
+# GFL runtime data and artifacts remain in Drive/external storage
+runtime/
+prototyping/gfl-deer/**/__pycache__/
+prototyping/gfl-deer/vendor/
+prototyping/gfl-deer/runs/
+*.pth
+*.zip
+
+__pycache__/
+*.pyc
