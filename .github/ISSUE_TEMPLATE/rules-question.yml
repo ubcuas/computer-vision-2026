@@ -1,0 +1,50 @@
+name: Competition rules question
+description: Track a competition ambiguity that may require an organizer clarification or reviewed team interpretation.
+title: "[Rules] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for competition-rule questions that affect implementation or evaluation. Routine research and experiments do not require an Issue.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: State one specific question that needs an authoritative answer.
+      placeholder: How is a 10 m deer cluster determined when multiple deer form a chain?
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Source and exact wording
+      description: Identify the document version, section, page, or written clarification and quote only the relevant wording.
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Why this matters
+      description: Explain which design, dataset, evaluation, or reporting decision depends on the answer.
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_interpretation
+    attributes:
+      label: Current interpretation or options
+      description: List plausible interpretations. Clearly label any temporary working assumption.
+    validations:
+      required: false
+
+  - type: textarea
+    id: resolution
+    attributes:
+      label: Resolution evidence
+      description: When resolved, record the exact response, date, channel, and preserved source. Update docs/competition/ambiguities.md as part of closure.
+    validations:
+      required: false
