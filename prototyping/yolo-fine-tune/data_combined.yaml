@@ -1,0 +1,4 @@
+train: [dataset/images/train, dataset_awir/images/train]
+val: [dataset/images/val, dataset_awir/images/val]
+nc: 1
+names: ['deer']

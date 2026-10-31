@@ -1,3 +1,5 @@
+# Ultralytics downloads helper weights (e.g. AMP check model) here
+weights/
 # Secrets and machine-local configuration
 .env
 .env.*

@@ -1,0 +1,11 @@
+# Training + evaluation (pulls in PyTorch, OpenCV, matplotlib)
+ultralytics>=8.3.0
+pandas            # train.ipynb training curves
+
+# Dataset building (build_dataset.py); also needs poppler's pdftoppm on PATH
+numpy
+scipy
+pillow
+
+# Running train.ipynb
+jupyterlab

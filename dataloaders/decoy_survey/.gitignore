@@ -1,0 +1,3 @@
+*.pt
+_render/
+__pycache__/
