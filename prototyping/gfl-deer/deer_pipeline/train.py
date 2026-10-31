@@ -26,11 +26,11 @@ def config(dataset,workdir,model='x101',lr=.00025,epochs=10,long_edge=2650,check
       dict(type='Resize',img_scale=scale,keep_ratio=True),
       dict(type='RandomFlip',flip_ratio=[.25,.25],direction=['horizontal','vertical']),
       dict(type='Normalize',mean=[123.675,116.28,103.53],std=[58.395,57.12,57.375],to_rgb=True),
-      dict(type='Pad',size_divisor=32),dict(type='DefaultFormatBundle'),dict(type='Collect',keys=['img','gt_bboxes','gt_labels'])]
+      dict(type='MinimumSizePad',minimum=96),dict(type='Pad',size_divisor=32),dict(type='DefaultFormatBundle'),dict(type='Collect',keys=['img','gt_bboxes','gt_labels'])]
     testpipe=[dict(type='LoadImageFromFile'),dict(type='MultiScaleFlipAug',img_scale=scale,flip=False,
        transforms=[dict(type='Resize',keep_ratio=True),dict(type='RandomFlip'),
        dict(type='Normalize',mean=[123.675,116.28,103.53],std=[58.395,57.12,57.375],to_rgb=True),
-       dict(type='Pad',size_divisor=32),dict(type='ImageToTensor',keys=['img']),dict(type='Collect',keys=['img'])])]
+       dict(type='MinimumSizePad',minimum=96),dict(type='Pad',size_divisor=32),dict(type='ImageToTensor',keys=['img']),dict(type='Collect',keys=['img'])])]
     dataset=Path(dataset).resolve()
     for split in ['train','val','test']:
         cfg.data[split]=dict(type='CocoDataset',ann_file=str(dataset/'annotations'/f'{split}.json'),img_prefix='',
@@ -55,7 +55,21 @@ def config(dataset,workdir,model='x101',lr=.00025,epochs=10,long_edge=2650,check
         cfg.lr_config=None;cfg.custom_hooks=[]
     return cfg
 
+def register_padding():
+    from mmdet.datasets.builder import PIPELINES
+    import mmcv
+    @PIPELINES.register_module(force=True)
+    class MinimumSizePad:
+        def __init__(self,minimum=96):self.minimum=minimum
+        def __call__(self,results):
+            for key in results.get('img_fields',['img']):
+                im=results[key]
+                results[key]=mmcv.impad(im,shape=(max(im.shape[0],self.minimum),max(im.shape[1],self.minimum)),pad_val=0)
+            results['pad_shape']=results['img'].shape
+            return results
+
 def register_hooks():
+    register_padding()
     import torch
     from mmcv.runner import HOOKS,Hook
     from mmdet.datasets import build_dataset,build_dataloader
@@ -118,6 +132,7 @@ def predict(config_path,checkpoint,annotations,output,device='cuda:0'):
     import torch
     from mmdet.apis import init_detector,inference_detector
     from PIL import Image,ImageDraw
+    register_padding()
     gt=read_json(annotations);model=init_detector(str(config_path),str(checkpoint),device=device)
     rows=[];times=[];preview=Path(output).parent/'examples';preview.mkdir(parents=True,exist_ok=True)
     for n,im in enumerate(gt['images']):
