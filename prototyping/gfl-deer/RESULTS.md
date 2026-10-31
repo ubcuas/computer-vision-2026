@@ -30,3 +30,5 @@ Verified portable ZIP: `gfl_model_bundle.zip` (~207 MiB). Contains trained infer
 ## Longer comparison
 
 Separate run `gfl_decoy_long_v1`, same architecture/data/preprocessing/seed, fresh official COCO initialization. Up to 100 epochs, LR 0.00025 with drops 60/80, validation-AP early stopping patience 30 (strict improvement). This investigates training budget; it does not equalize YOLO's optimizer or augmentation. Default notebook remains 10 epochs; select RUN_NAME, EPOCHS=100 and PATIENCE=30 for the longer run. All outputs stay separate; do not overwrite the short run. Launched 2026-10-31 at about 15:02 Vancouver time, code revision `09ae669`, persistent launch marker `gfl_decoy_long_v1/launch.json`; real epoch-1 GPU progress verified. All 15 pipeline tests completed (14 passed, one unavailable-source test skipped), and the registered stopping hook/config passed server checks. Results pending.
+
+Annotation caveat: source-label visual issues were found after training. A full conversion/hash audit confirmed these originate in the shared source dataset, not GFL coordinate conversion; see ANNOTATION_AUDIT.md. Scores remain provisional pending shared label review.
