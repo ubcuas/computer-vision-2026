@@ -14,6 +14,9 @@ Anant's teammate-reported Run #1: precision 0.66, recall 0.75, AP50 0.73, AP50-9
 
 Artifacts on Michael's server: `/home/mrd/gfl_workspace/runs/gfl_decoy_run1_v1/`. The verified `gfl_model_bundle.zip` includes inference weights, config, calibration and reports; epoch checkpoints preserve optimizer state separately. See `RESULTS.md` for checkpoint hashes and comparison limitations.
 
+## Shared data-quality limitation
+Gurnek identified oversized/loose bounding boxes in the shared decoy data. Better reviewed box extents are needed for both detectors. Excessive background may impair localization and could contribute to Anant's reported overlapping boxes, but this explanation remains unverified; prediction examples and NMS settings also need inspection. Target/species identity and box extent are separate annotation questions. Current runs preserve original labels; any corrected dataset should be jointly versioned and evaluated separately.
+
 ## Why two GFL training runs?
 These are **two training recipes for the same GFL architecture**, producing separate trained checkpoints. Anant's YOLO11s is the other detector architecture being compared. The short run asks whether the reconstructed paper recipe transfers to our decoys; the longer run asks whether giving GFL a training budget closer to Anant's improves validation performance. Ten epochs is a paper-based starting point, not evidence that our dataset has converged.
 
