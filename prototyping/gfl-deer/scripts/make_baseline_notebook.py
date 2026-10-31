@@ -73,5 +73,19 @@ print('Checkpoint inventory:',(RUN/'report/checkpoint_inventory.json').read_text
 '''),cell('markdown','''## Reuse and resume
 `best_f1.pth` and `best_bbox_mAP_epoch_*.pth` hold trained weights. `epoch_N.pth` also preserves optimizer/training state; the last two epochs are retained. `latest.pth` may be a symlink, so transfer actual checkpoint files. Keep the complete run directory on persistent storage, together with the dataset inventory. To use the model later, rerun configuration/data cells and prediction/evaluation cells only; skip training. To continue interrupted training, set RESUME to an actual epoch checkpoint and retain the same data/config. Training refuses existing checkpoints without explicit resume. Never delete the run folder to perform inference.
 ''')]
+cells += [cell('markdown','''## Take the trained model off the server
+This creates a verified ZIP with trained inference weights, architecture config, confidence calibration, validation results and graphs. No dataset images are bundled. Keep original epoch checkpoints separately if you want to continue training.
+'''),cell('code','''subprocess.run([PY,'prototyping/gfl-deer/scripts/export_model.py','--run',str(RUN)],check=True)
+BUNDLE=RUN/'gfl_model_bundle.zip'
+print('Copy this file off the server:',BUNDLE)
+from IPython.display import FileLink
+import shutil
+# Jupyter serves files under its root; expose a copy in the ignored artifacts directory.
+DOWNLOAD=REPO/'artifacts'/RUN_NAME
+DOWNLOAD.mkdir(parents=True,exist_ok=True)
+shutil.copy2(BUNDLE,DOWNLOAD/BUNDLE.name)
+display(FileLink(str((DOWNLOAD/BUNDLE.name).relative_to(REPO))))
+print('Alternatively, on your laptop: scp USER@SERVER:'+str(BUNDLE)+' .')
+''')]
 nb={'nbformat':4,'nbformat_minor':5,'metadata':{'kernelspec':{'name':'python3','display_name':'Python 3'}},'cells':cells}
 (root/'notebooks/GFL_Anant_Baseline_Server.ipynb').write_text(json.dumps(nb,indent=2)+'\n')

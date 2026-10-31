@@ -17,3 +17,9 @@ Training has not been run for this restart; GPU execution will happen after Gurn
 ## Notebook outputs and persistence
 
 Training streams live logs and saves launcher.log. Post-training cells render training loss, validation F1/AP by epoch, P/R/F1 confidence curves, and green-ground-truth/red-prediction examples. Metrics CSV/JSON, calibration and checkpoint SHA-256 inventory are saved under the run directory. There is no validation-loss curve because that loss is not computed in this loop. The reporting script runs in the pinned GFL environment; the notebook kernel needs IPython for display. Best weights support inference without training; actual epoch checkpoints include optimizer state for continuation. Keep the run directory on persistent server storage and copy it before removing the server account/job. These reports have local fixture verification, not a completed new GPU run.
+
+## Portable output and branch integration
+
+The final notebook cell creates and verifies `gfl_model_bundle.zip`: inference weights (optimizer stripped), config, calibration, metrics, graphs, checksum manifest and inference instructions. It exposes a Jupyter download link under ignored artifacts/ and prints an scp command. Keep actual epoch checkpoints separately for full training resume. Training has not been rerun.
+
+This branch now includes main at 1fbeeb6, including Anant’s combined-data loader/notebook and team documentation. Default GFL comparison remains the documented decoy-only Run #1; choose combined explicitly for latest YOLO Run #2. Train on this branch, preserve external run artifacts and review through a PR before merging to main.
