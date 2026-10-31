@@ -20,11 +20,11 @@ pip install -r requirements.txt
 
 nvidia-smi                        # check the GPU is visible
 tmux                              # optional: training keeps running if SSH drops (reattach: tmux attach)
-yolo detect train data=data_combined.yaml model=yolo11s.pt imgsz=1280 epochs=200 patience=30 project=runs name=deer
+yolo detect train data=data_combined.yaml model=yolo11s.pt imgsz=1280 epochs=300 patience=50 project=runs name=deer_v2
 ```
 
-Weights end up in `runs/deer/weights/` (`best.pt` = best validation epoch, `last.pt` = final epoch),
-with `results.csv` and plots in `runs/deer/`.
+Weights end up in `runs/deer_v2/weights/` (`best.pt` = best validation epoch, `last.pt` = final epoch),
+with `results.csv` and plots in `runs/deer_v2/`. Use a new `name=` for each run so earlier runs are kept.
 
 Or use the notebook instead of the `yolo` command:
 
