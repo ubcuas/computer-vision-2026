@@ -3,6 +3,9 @@
 - `dataset/`: YOLO dataset of the decoy survey slides, 1 class (`deer`).
   264 images (88 with deer, 176 without), 146 boxes, split 211 train / 53 val.
   Built by `dataloaders/decoy_survey/build_dataset.py`.
+- `dataset_awir/`: AWIR-Deer RGB drone photos, 1 class (`deer`).
+  53 images (all with deer), 96 boxes, split 42 train / 11 val.
+  Built by `dataloaders/awir_deer/convert.py`.
 - `train.ipynb`: trains YOLO11, plots curves, validates, and shows predictions.
 
 ## Training on a GPU server
@@ -17,7 +20,7 @@ pip install -r requirements.txt
 
 nvidia-smi                        # check the GPU is visible
 tmux                              # optional: training keeps running if SSH drops (reattach: tmux attach)
-yolo detect train data=dataset/data.yaml model=yolo11s.pt imgsz=1280 epochs=100 patience=30 project=runs name=deer
+yolo detect train data=data_combined.yaml model=yolo11s.pt imgsz=1280 epochs=200 patience=30 project=runs name=deer
 ```
 
 Weights end up in `runs/deer/weights/` (`best.pt` = best validation epoch, `last.pt` = final epoch),
