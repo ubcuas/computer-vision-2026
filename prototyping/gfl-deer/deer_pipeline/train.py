@@ -11,7 +11,7 @@ MODELS={
 'x101':('gfl_x101_32x4d_fpn_dconv_c4-c5_mstrain_2x_coco.py','https://download.openmmlab.com/mmdetection/v2.0/gfl/gfl_x101_32x4d_fpn_dconv_c4-c5_mstrain_2x_coco/gfl_x101_32x4d_fpn_dconv_c4-c5_mstrain_2x_coco_20200630_102002-14a2bf25.pth'),
 'r50':('gfl_r50_fpn_1x_coco.py','https://download.openmmlab.com/mmdetection/v2.0/gfl/gfl_r50_fpn_1x_coco/gfl_r50_fpn_1x_coco_20200629_121244-25944287.pth')}
 
-def config(dataset,workdir,model='x101',lr=.00025,epochs=10,long_edge=2650,checkpoint=None,smoke=False):
+def config(dataset,workdir,model='x101',lr=.00025,epochs=10,long_edge=2650,checkpoint=None,smoke=False,patience=0):
     import mmdet
     from mmcv import Config
     source=ROOT/'vendor'/'mmdetection'/'configs'/'gfl'/MODELS[model][0]
@@ -38,7 +38,7 @@ def config(dataset,workdir,model='x101',lr=.00025,epochs=10,long_edge=2650,check
     cfg.data.samples_per_gpu=1;cfg.data.workers_per_gpu=2
     cfg.optimizer=dict(type='SGD',lr=lr,momentum=.9,weight_decay=.0001)
     cfg.optimizer_config=dict(grad_clip=dict(max_norm=35,norm_type=2))
-    cfg.lr_config=dict(policy='step',warmup='linear',warmup_iters=500,warmup_ratio=.001,step=[6,8])
+    cfg.lr_config=dict(policy='step',warmup='linear',warmup_iters=500,warmup_ratio=.001,step=[max(1,round(epochs*.6)),max(2,round(epochs*.8))])
     cfg.runner=dict(type='EpochBasedRunner',max_epochs=epochs)
     cfg.checkpoint_config=dict(interval=1,max_keep_ckpts=2)
     cfg.evaluation=dict(interval=1,metric='bbox',save_best='bbox_mAP')
@@ -46,6 +46,7 @@ def config(dataset,workdir,model='x101',lr=.00025,epochs=10,long_edge=2650,check
     cfg.fp16=dict(loss_scale='dynamic');cfg.workflow=[('train',1)]
     cfg.model.test_cfg.score_thr=.001;cfg.model.test_cfg.max_per_img=300
     cfg.custom_hooks=[dict(type='ValidationF1Hook')]
+    if patience:cfg.custom_hooks.append(dict(type='ValidationAPEarlyStoppingHook',patience=patience,priority=80))
     cfg.dist_params=dict(backend='nccl');cfg.log_level='INFO'
     if smoke:
         cfg.runner=dict(type='IterBasedRunner',max_iters=2)
@@ -54,6 +55,13 @@ def config(dataset,workdir,model='x101',lr=.00025,epochs=10,long_edge=2650,check
         cfg.checkpoint_config=dict(interval=1,by_epoch=False,max_keep_ckpts=2)
         cfg.lr_config=None;cfg.custom_hooks=[]
     return cfg
+
+def early_stopping_state(previous,best_score,epoch,patience):
+    """Track the EvalHook's cumulative best AP; ties do not reset patience."""
+    previous=previous or {}
+    best_epoch=epoch if best_score>previous.get('best_score',float('-inf')) else previous.get('best_epoch',epoch)
+    return dict(best_score=best_score,best_epoch=best_epoch,epoch=epoch,
+                patience=patience,stopped=epoch-best_epoch>=patience)
 
 def register_padding():
     from mmdet.datasets.builder import PIPELINES
@@ -74,6 +82,19 @@ def register_hooks():
     from mmcv.runner import HOOKS,Hook
     from mmdet.datasets import build_dataset,build_dataloader
     from mmdet.apis import single_gpu_test
+    @HOOKS.register_module(force=True)
+    class ValidationAPEarlyStoppingHook(Hook):
+        def __init__(self,patience):self.patience=patience
+        def after_train_epoch(self,runner):
+            # EvalHook (priority 70) has updated its cumulative best AP before this hook.
+            path=Path(runner.work_dir)/'early_stopping.json'
+            previous=read_json(path) if path.exists() else None
+            score=runner.meta.get('hook_msgs',{}).get('best_score',-1.)
+            state=early_stopping_state(previous,float(score),runner.epoch+1,self.patience)
+            write_json(path,state)
+            if state['stopped']:
+                runner.logger.info('Early stopping: validation AP has not improved for %s epochs',self.patience)
+                runner._max_epochs=runner.epoch+1
     @HOOKS.register_module(force=True)
     class ValidationF1Hook(Hook):
         """Select an adaptation checkpoint with validation F1, never test predictions."""
@@ -102,14 +123,14 @@ def results_to_coco(results,gt):
             if x2>x1 and y2>y1:out.append(dict(image_id=im['id'],category_id=1,bbox=[x1,y1,x2-x1,y2-y1],score=float(score)))
     return out
 
-def run_train(dataset,workdir,model='x101',lr=.00025,epochs=10,long_edge=2650,checkpoint=None,resume=None,smoke=False):
+def run_train(dataset,workdir,model='x101',lr=.00025,epochs=10,long_edge=2650,checkpoint=None,resume=None,smoke=False,patience=0):
     import torch,mmcv,mmdet
     from mmdet.apis import set_random_seed
     from mmdet.datasets import build_dataset
     from mmdet.models import build_detector
     from mmdet.apis import train_detector
     if not torch.cuda.is_available():raise RuntimeError('Training requires the planned NVIDIA Colab runtime; no CPU training was started')
-    register_hooks();cfg=config(dataset,workdir,model,lr,epochs,long_edge,checkpoint,smoke)
+    register_hooks();cfg=config(dataset,workdir,model,lr,epochs,long_edge,checkpoint,smoke,patience)
     Path(workdir).mkdir(parents=True,exist_ok=True);cfg.dump(str(Path(workdir)/'config.py'))
     if resume:cfg.resume_from=str(resume)
     write_json(Path(workdir)/'environment.json',dict(torch=torch.__version__,mmcv=mmcv.__version__,mmdet=mmdet.__version__,

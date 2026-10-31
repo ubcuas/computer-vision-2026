@@ -4,12 +4,19 @@ import unittest
 from pathlib import Path
 from deer_pipeline.common import coco,validate,export,read_json
 from deer_pipeline.metrics import detection_metrics,calibrate,ap_metrics
-from deer_pipeline.train import results_to_coco
+from deer_pipeline.train import results_to_coco,early_stopping_state
 
 class PipelineTests(unittest.TestCase):
     def setUp(self):
         self.gt=dict(info={},images=[dict(id=1,width=100,height=100),dict(id=2,width=100,height=100)],categories=[dict(id=1,name='deer')],annotations=[dict(id=1,image_id=1,category_id=1,bbox=[10,10,20,20],area=400,iscrowd=0)])
         self.pred=[dict(image_id=1,category_id=1,bbox=[10,10,20,20],score=.9)]
+    def test_early_stopping_plateau_and_improvement(self):
+        state=early_stopping_state(None,.5,1,30)
+        state=early_stopping_state(state,.5,30,30)
+        self.assertFalse(state['stopped'])
+        self.assertTrue(early_stopping_state(state,.5,31,30)['stopped'])
+        state=early_stopping_state(state,.6,31,30)
+        self.assertFalse(state['stopped']);self.assertEqual(state['best_epoch'],31)
     def test_perfect_including_empty_images(self):
         r=detection_metrics(self.gt,self.pred);self.assertEqual(r['f1'],1);self.assertEqual(r['exact_count_accuracy'],1)
     def test_duplicate_prediction_only_matches_once(self):
