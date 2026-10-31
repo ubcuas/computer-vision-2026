@@ -1,5 +1,7 @@
 # Michael's handoff: Gurnek's GFL deer prototype
 
+**October 31 restart:** see [BASELINE.md](BASELINE.md) and `notebooks/GFL_Anant_Baseline_Server.ipynb` for the new comparison. The paused historical experiment below remains separate.
+
 **Status: paused on October 25, 2026.** Gurnek stopped the Colab GPU session and deleted its automatic monitor. Nothing will auto-start. Two learning-rate trials finished; the third was interrupted. The planned full source fit, adaptation and final comparison did not finish. The exact-Anant-data baseline is prepared but has never trained. Partial checkpoints remain useful; they are not final competition models.
 
 This branch adds GFL model code under `prototyping/gfl-deer/` and reusable preparation/evaluation under `dataloaders/deer_shared/`. It is based on Anant's `deer-yolo-dataset` branch. It does not merge Yash's `ai-setup` documentation branch. `current_run_snapshot/` preserves the original Colab package; `deer_pipeline/` is the reorganized active code. The snapshot is provenance, not the server entry point.
