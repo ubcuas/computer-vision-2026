@@ -7,6 +7,24 @@ def cell(kind,text):
  return d
 cells=[cell('markdown','''# GFL against Anant’s baseline
 Run on Michael’s Linux NVIDIA server. Default matches the **reported Run #1**: 211 decoy train / 53 decoy validation images. No Rucervus, Sherbrooke or AWIR. Run #2 in the latest repository uses decoy + AWIR; choose that explicitly below if comparing it. Same source images/boxes/splits; different architecture, augmentation and training budget. Validation is not an independent test. No training runs until the training cell is executed.
+'''),cell('markdown','''## Why two GFL training runs?
+These are **two training recipes for the same GFL architecture**, producing separate trained checkpoints. Anant's YOLO11s is the other detector architecture being compared. The short run asks whether the reconstructed paper recipe transfers to our decoys; the longer run asks whether giving GFL a training budget closer to Anant's improves validation performance. Ten epochs is a paper-based starting point, not evidence that our dataset has converged.
+
+| Setting | GFL short baseline (current) | GFL longer comparison (planned) | Anant YOLO11s Run #1 (reported) |
+|---|---|---|---|
+| Architecture | GFL ResNeXt-101 32x4d + deformable convolutions | Same GFL architecture | YOLO11s |
+| Initialization | Official COCO pretrained weights | Fresh official COCO weights | COCO pretrained YOLO11s |
+| Data | 211 decoy train / 53 validation | Identical images, boxes and split | Same decoy split |
+| Training budget | 10 epochs | Up to 100 epochs; validation AP patience 30 | Up to 100 epochs; patience 30 |
+| Learning-rate schedule | Initial LR 0.00025; drops at 6 and 8 | Planned LR 0.00025; drops at 60 and 80 | YOLO training configuration |
+| Input preprocessing | Aspect-preserving 1280 long edge; minimum-size padding | Same preprocessing | Reported image size 1280; YOLO letterboxing |
+| Status | Running; results pending | Pending implementation/verification and completion of short run | Teammate-reported results |
+
+The longer recipe must be implemented and verified before launch. It uses a **new run directory** (`gfl_decoy_long_v1`) and starts independently from COCO, rather than continuing the short run after its learning rate has already decayed. Retain `gfl_decoy_run1_v1` and all its outputs. Do not run both GPU jobs concurrently. The executable cells below currently launch the **10-epoch baseline only**.
+
+Both runs save best-F1/AP weights and resumable optimizer checkpoints. After each finishes, record the actual epochs, selected checkpoint, validation precision/recall/F1, AP50, AP50-95, count errors, latency, configuration and artifact hashes. Add the measured comparison here once available; do not replace pending results with estimates.
+
+Matching data and maximum epochs makes the comparison more useful, but does not equalize augmentation, optimizer, architecture or compute. Compare AP using the same evaluation implementation where possible; our validation-calibrated P/R/F1 may differ from Ultralytics' reporting conventions. This validation set is used for checkpoint/threshold selection and is **not an independent test set**, so no team winner is established by these numbers.
 '''),cell('code','''from pathlib import Path
 import os,sys,subprocess,json
 # Start Jupyter from the repository root.
