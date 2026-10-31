@@ -1,0 +1,12 @@
+# Experiment: add reviewed BAMBI matched RGB data to the existing decoy training set.
+# The BAMBI output lives under the ignored repository-root data/ directory.
+train:
+  - dataset/images/train
+  - ../../data/bambi_yolo/images/train
+
+# Keep the decoy validation split unchanged for comparison with the decoy-only baseline.
+# Evaluate a held-out complete BAMBI flight separately once one is available.
+val: dataset/images/val
+
+nc: 1
+names: ['deer']
