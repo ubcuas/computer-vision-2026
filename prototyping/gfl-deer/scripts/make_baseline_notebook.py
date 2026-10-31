@@ -48,8 +48,10 @@ cmd=[PY,'prototyping/gfl-deer/run.py','train-matched','--workspace',str(WORKSPAC
 if RESUME:cmd+=['--resume',str(RESUME)]
 RUN.mkdir(parents=True,exist_ok=True)
 with (RUN/'launcher.log').open('a') as log:
- result=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT)
-result.check_returncode()
+ process=subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,bufsize=1)
+ for line in process.stdout:
+  print(line,end='');log.write(line);log.flush()
+ assert process.wait()==0, 'Training failed; inspect launcher.log and resume saved checkpoint'
 '''),cell('code','''# Validation only, using F1-selected checkpoint. No retraining.
 PRED=RUN/'val_predictions.json';CAL=RUN/'validation_calibration.json'
 def run(*args):subprocess.run([PY,'-m','deer_pipeline',*map(str,args)],check=True)
@@ -57,6 +59,19 @@ run('predict','--config',RUN/'config.py','--checkpoint',RUN/'best_f1.pth','--ann
 run('calibrate','--annotations',DATA/'annotations/val.json','--predictions',PRED,'--output',CAL)
 run('evaluate','--annotations',DATA/'annotations/val.json','--predictions',PRED,'--calibration',CAL,'--output',RUN/'validation_metrics.json')
 print('Saved weights/config/logs/metrics:',RUN)
+''')]
+cells += [cell('markdown','''## Saved metrics, curves and prediction examples
+Run these cells after training, or when reopening an existing run. They do not retrain. P/R/F1 use the validation-selected confidence at IoU 0.5; AP averages over confidence thresholds. This differs from Ultralytics' reporting conventions. No validation-loss graph is claimed: our loop logs training losses and validation detection metrics.
+'''),cell('code','''subprocess.run([PY,'prototyping/gfl-deer/scripts/report.py','--run',str(RUN),
+                '--annotations',str(DATA/'annotations/val.json')],check=True)
+from IPython.display import display, Image as DisplayImage
+print(json.loads((RUN/'validation_metrics.json').read_text()).keys())
+print((RUN/'report/metrics.csv').read_text())
+display(DisplayImage(filename=str(RUN/'report/training_and_validation.png')))
+display(DisplayImage(filename=str(RUN/'report/prediction_examples.png')))
+print('Checkpoint inventory:',(RUN/'report/checkpoint_inventory.json').read_text())
+'''),cell('markdown','''## Reuse and resume
+`best_f1.pth` and `best_bbox_mAP_epoch_*.pth` hold trained weights. `epoch_N.pth` also preserves optimizer/training state; the last two epochs are retained. `latest.pth` may be a symlink, so transfer actual checkpoint files. Keep the complete run directory on persistent storage, together with the dataset inventory. To use the model later, rerun configuration/data cells and prediction/evaluation cells only; skip training. To continue interrupted training, set RESUME to an actual epoch checkpoint and retain the same data/config. Training refuses existing checkpoints without explicit resume. Never delete the run folder to perform inference.
 ''')]
 nb={'nbformat':4,'nbformat_minor':5,'metadata':{'kernelspec':{'name':'python3','display_name':'Python 3'}},'cells':cells}
 (root/'notebooks/GFL_Anant_Baseline_Server.ipynb').write_text(json.dumps(nb,indent=2)+'\n')

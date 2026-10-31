@@ -13,3 +13,7 @@ The pasted progress document reports YOLO Run #1 P=.66, R=.75, AP50=.73, AP50-95
 For SSH, use a server tmux session and port-forward Jupyter to your laptop. Outputs stay under WORKSPACE/runs/RUN_NAME, with config, package freeze, hardware, optimizer checkpoints, best_f1.pth, calibration and predictions. Use a new RUN_NAME for a fresh experiment. To resume use an actual epoch_N.pth file, retaining the same variant/config. Never rerun training merely to perform prediction.
 
 Training has not been run for this restart; GPU execution will happen after Gurnek connects to Michael's server. Original stopped Colab artifacts remain separate in Drive; this notebook does not download or resume them.
+
+## Notebook outputs and persistence
+
+Training streams live logs and saves launcher.log. Post-training cells render training loss, validation F1/AP by epoch, P/R/F1 confidence curves, and green-ground-truth/red-prediction examples. Metrics CSV/JSON, calibration and checkpoint SHA-256 inventory are saved under the run directory. There is no validation-loss curve because that loss is not computed in this loop. The reporting script runs in the pinned GFL environment; the notebook kernel needs IPython for display. Best weights support inference without training; actual epoch checkpoints include optimizer state for continuation. Keep the run directory on persistent server storage and copy it before removing the server account/job. These reports have local fixture verification, not a completed new GPU run.
