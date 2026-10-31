@@ -34,3 +34,6 @@ jupyter lab --no-browser --port 8888
 ```
 
 If `import cv2` fails with `libGL.so.1`, run `sudo apt install -y libgl1`.
+
+The notebook's validation and prediction cells are set up to fit an 8 GB GPU (one image per
+`predict` call, `workers=0` for `val`). Training uses AutoBatch, so it adapts to the GPU on its own.

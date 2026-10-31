@@ -1,0 +1,72 @@
+# Ultralytics downloads helper weights (e.g. AMP check model) here
+weights/
+# Secrets and machine-local configuration
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Python bytecode and tool caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Local Python environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files and logs
+*.log
+*.tmp
+*.temp
+/tmp/
+/temp/
+/.cache/
+
+# Local datasets and collected media
+# These patterns are rooted so documentation under docs/datasets/ remains tracked.
+/data/
+/datasets/
+/recordings/
+
+# Training, evaluation, and experiment outputs
+/artifacts/
+/outputs/
+/runs/
+/multirun/
+/checkpoints/
+/weights/
+/mlruns/
+/wandb/
+/tensorboard/
+
+# Model and accelerator artifacts
+*.ckpt
+*.engine
+*.onnx
+*.pb
+*.pth
+*.pt
+*.tflite
+*.weights
+
+# DVC stores large data in its cache; DVC metadata files should remain tracked.
+/.dvc/cache/
