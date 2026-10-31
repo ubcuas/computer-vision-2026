@@ -6,14 +6,24 @@ Compared the actual server COCO train/val annotations used for training with the
 
 The suspicious source labels therefore predate the GFL format adapter; they are shared with any YOLO run using this dataset revision. This does not independently verify which files were on a historical teammate training machine.
 
-## Visual review candidates (all validation)
+## Visual review shortlist
 
-- slide076: original YOLO box covers grass/path with no obvious deer. Box center ~756,302 pixels; fixed-size ~120x120. A fallback box is consistent with the source builder, but precise upstream cause remains unverified.
-- slide248: original tiny box covers a distant bird-like/ambiguous object; needs human review before declaring its species or deleting it.
-- slide206: original label file is empty although a deer-shaped decoy is visible at bottom right. Our detector prediction is counted as a false positive under the existing annotations. Verify target identity against source survey key.
-- slide077: one labelled tan deer and a second white animal-shaped decoy; review intended species/exclusion policy rather than automatically labelling it deer.
+All 146 labelled regions were screened on contextual contact sheets, followed by full-image inspection of the shortlist. This is not an exhaustive audit of missing objects in 176 negative images. Box numbers below are 1-based lines in the original YOLO label file. Species judgments on small/occluded objects require human review.
 
-These observations do not establish the error rate in the training partition. That requires a separate visual audit. Do not silently correct labels or change the ongoing experiment. Both GFL runs retain the original dataset for reproducibility; interpret their validation scores as provisional pending annotation review.
+| Image | Split | Label line | Concern / review action |
+|---|---|---|---|
+| slide076 | val | 1 | Strongest suspected misplaced label: 120x120 box covers grass/path without an obvious deer. Original CSV calls the point deer; check image/point alignment. |
+| slide248 | val | 1 | Extremely small box on an obscured object at the right edge. CSV calls it deer; identity/visible extent cannot be reliably judged from this crop. Do not automatically delete or relabel as bird. |
+| slide051 | train | 2, 3 | Fitted boxes appear to capture too little of one deer and excessive background/too little of another. Review and redraw visible deer extents. |
+| slide111 | train | 5, 6 | Similar poor-fitting boxes in the same scene configuration as slide051: narrow partial box and background-heavy box cutting off visible animal. |
+| slide028 | train | 1 | Tight body fragment on upper deer, with visible head/neck outside the box; review box extent. |
+| slide156 | train | 1 | Upper deer box tightly covers body while head/neck extend outside; review extent. |
+
+### Correction to preliminary visual suspicions
+
+Read the original local decoy_survey_key_points.csv. It explicitly identifies the white animal in slide206 as coyote (no deer points on that slide); slide077 has a coyote and a deer; slide046 has a coyote plus two deer. Excluding coyotes is intentional for a deer-only dataset. These are NOT supported missing-deer annotation claims. Our corresponding predictions may be genuine coyote/deer classification errors. Earlier suggestions of missing deer on slide206/077 were premature and are withdrawn.
+
+The shortlist contains probable fitting issues plus ambiguous review cases, not six confirmed incorrect class labels. No source labels or the running experiment were changed.
 
 ## Upstream builder risks to investigate
 
