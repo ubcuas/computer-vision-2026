@@ -64,3 +64,5 @@ Server run: `/home/mrd/gfl_workspace/runs/gfl_decoy_long_v1/`. Executed notebook
 - gfl_model_bundle.zip SHA256 `0930beaa2f59f9f4f90b9759b6f209b46f931313396264c6c3ae9abaa2b7e720`.
 
 The ZIP and graphs were created and verified by the completed server notebook. Preserve original epoch checkpoints for continuation; portable ZIP is sufficient for inference without retraining.
+
+Proper direct checkpoint comparison completed2026-11-01: see reports/matched_comparison_2026-11-01.md. Common-evaluator YOLO F1.7500/AP50.7587/AP5095.3660; short GFL best-AP epoch9 AP5095.6758 reveals checkpoint-selection confounding in the original long-vs-short claim. No independent test exists.

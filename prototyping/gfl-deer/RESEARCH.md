@@ -25,3 +25,5 @@ DonaNet's current repository provides an Ultralytics YOLO training interface; it
 ## Honest comparisons
 
 Published numbers belong to different datasets and protocols; do not rank models by those raw numbers. Report locally measured model results separately from this literature table. Use our frozen decoy test subset for all team checkpoints, with validation-only threshold tuning. The test contains one physical field/decoy arrangement and cannot demonstrate new-site transfer. Annotation quality and small targets are material limitations.
+
+Current decoy-only experiments differ from the initial wildlife-data plan above: fixed LR,211train/53validation images, no independent test. See reports/matched_comparison_2026-11-01.md for the measured audit and current comparison; the earlier planned frozen test was not used in these runs.
