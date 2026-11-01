@@ -14,6 +14,19 @@ Anant's teammate-reported Run #1: precision 0.66, recall 0.75, AP50 0.73, AP50-9
 
 Artifacts on Michael's server: `/home/mrd/gfl_workspace/runs/gfl_decoy_run1_v1/`. The verified `gfl_model_bundle.zip` includes inference weights, config, calibration and reports; epoch checkpoints preserve optimizer state separately. See `RESULTS.md` for checkpoint hashes and comparison limitations.
 
+## Completed longer-run comparison
+The separate longer run completed on 2026-10-31 around 16:20 Vancouver time, early-stopping at **epoch 41** after 30 epochs without AP improvement. Its selected best-F1 checkpoint is **epoch 11**. Configured LR drops at 60/80 were not reached. One CUDA interruption was recovered from epoch13 with optimizer state preserved.
+
+| Validation metric | Short GFL (epoch4) | Longer GFL (epoch11) | YOLO Run1 (teammate reported) |
+|---|---:|---:|---:|
+| Precision | .9143 | .9412 | .66 |
+| Recall | .9412 | .9412 | .75 |
+| F1 | .9275 | .9412 | — |
+| AP50 | .9501 | .9443 | .73 |
+| AP50-95 | .5991 | .6925 | .37 |
+
+Longer run:32 TP,2 FP,2 FN, confidence .41, count MAE .07547 and exact-count accuracy92.45%. Mean latency .1220s/image. Recall is unchanged; fewer false positives and improved localization are the main gains. These are validation comparisons, not independent test results or proof of an architecture winner. See RESULTS.md for hashes, recovery history and artifact paths. The original short-run outputs remain separate; use `GFL_Decoy_Long.executed.ipynb` to inspect the longer run outputs.
+
 ## Shared data-quality limitation
 Gurnek identified oversized/loose bounding boxes in the shared decoy data. Better reviewed box extents are needed for both detectors. Excessive background may impair localization and could contribute to Anant's reported overlapping boxes, but this explanation remains unverified; prediction examples and NMS settings also need inspection. Target/species identity and box extent are separate annotation questions. Current runs preserve original labels; any corrected dataset should be jointly versioned and evaluated separately.
 
@@ -28,7 +41,7 @@ These are **two training recipes for the same GFL architecture**, producing sepa
 | Training budget | 10 epochs | Up to 100 epochs; validation AP patience 30 | Up to 100 epochs; patience 30 |
 | Learning-rate schedule | Initial LR 0.00025; drops at 6 and 8 | Planned LR 0.00025; drops at 60 and 80 | YOLO training configuration |
 | Input preprocessing | Aspect-preserving 1280 long edge; minimum-size padding | Same preprocessing | Reported image size 1280; YOLO letterboxing |
-| Status | Running; results pending | Ready for verified separate launch | Teammate-reported results |
+| Status | Completed, epoch 10 | Completed; stopped at epoch 41 | Teammate-reported results |
 
 The longer recipe uses scaled learning-rate milestones (60/80 for 100 epochs) and stops after 30 epochs without a strict improvement in validation COCO AP50-95. This is an adaptation of the paper recipe. It uses a **new run directory** (`gfl_decoy_long_v1`) and starts independently from COCO, rather than continuing the short run after its learning rate has already decayed. Retain `gfl_decoy_run1_v1` and all its outputs. Do not run both GPU jobs concurrently. The executable cells default to the **10-epoch baseline**; select the longer run using RUN_NAME, EPOCHS and PATIENCE in the configuration cell.
 
