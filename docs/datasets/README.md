@@ -32,3 +32,7 @@ These candidates came from initial team notes and still require source and licen
 Do not call a dataset approved until its provenance and license are verified and the team has defined a stable split. Preserve the final competition-like test set from training and model selection.
 
 The statement that a dataset was previously used is not yet a reproducible experiment record. Before relying on the Mississippi State result, recover or rerun the associated code, split, configuration, metrics, and conclusions.
+
+## Gurnek shared deer split
+
+See [deer final_v1](deer-final-v1.md) and [portable loader](../../dataloaders/deer_final_v1/README.md) for the locally frozen mixed-source split, decoy corrections, 4x training weighting, provenance and evaluation limitations. Source licensing and shared artifact hosting remain unresolved; this is not a blanket redistribution approval.
