@@ -1,0 +1,13 @@
+images/test/awir__awir_060421_DJI_0070.jpg
+images/test/awir__awir_060421_DJI_0072.jpg
+images/test/awir__awir_060421_DJI_0074.jpg
+images/test/awir__awir_060421_DJI_0080.jpg
+images/test/awir__awir_060421_DJI_0082.jpg
+images/test/awir__awir_060421_DJI_0084.jpg
+images/test/awir__awir_060421_DJI_0674.jpg
+images/test/awir__awir_060421_DJI_0676.jpg
+images/test/awir__awir_060421_DJI_0678.jpg
+images/test/awir__awir_060421_DJI_0724.jpg
+images/test/awir__awir_060421_DJI_0726.jpg
+images/test/awir__awir_060421_DJI_0780.jpg
+images/test/awir__awir_060421_DJI_0782.jpg

@@ -97,3 +97,5 @@ Do not create durable documentation for routine command output, step-by-step nar
 ## Adding a new knowledge file
 
 Before adding another document, confirm that its purpose is not already owned by an existing file. Give the new file one clear responsibility, link it from the appropriate index, and add it to this map. Avoid creating empty folders or speculative templates that the team is not yet using.
+
+Current mixed-source detector dataset handoff: [deer-v3.md](datasets/deer-v3.md). Reusable loader and frozen metadata: `dataloaders/deer_v3/`.
