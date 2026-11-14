@@ -1,6 +1,6 @@
 # Deer v3 model comparison
 
-- Owner: Gurnek; status: inconclusive for deployment, completed held-out evaluation.
+- Owner: Gurnek. Status: comparison closed after held-out evaluation of YOLO11s, YOLO26s, GFL and D-FINE-L on Modal. Deployment remains unverified.
 - Data: [final Deer v3 release](../../datasets/deer-v3.md), frozen ZIP SHA256 `37dcff344fde1b29998ebcc9466772e0fda6e04bc94ddeefb09fc6c1d6eb0372`.
 - Split: 3,193 train / 358 validation / 238 test images. Fourfold decoy training exposure gives 3,610 training entries. Same split and labels across models; model-specific resizing and augmentation differ.
 - Code: dirty working tree based on `1a9e41cd1cb909c603f6b91c97f384ff5bd69a88`; implementation archived in the [comparison prototype](../../../prototyping/deer-v3-comparison/README.md). Seed 42.
@@ -25,7 +25,7 @@ Artifacts: Modal workspace `software-9441`, environment `main`. In each volume, 
 | GFL | `uas-deer-v3-gfl_long` | `/gfl_long/best_bbox_mAP_epoch_25.pth` | `2b75bf451d131b3356a81fcd9c272f8370cdd7c7d07f3727ccd4cce4bccf920d` |
 | D-FINE-L | `uas-deer-v3-dfine_l` | `/dfine_l/fit/checkpoint0019.pth` | `25a32c886463ca4efcf90830f66627142829cd3777691d9893230283d52dbeb5` |
 
-Training and shared profiling used an A100-40GB (YOLO11s started on a laptop RTX 3070 before resuming on Modal). The Modal image definitions pin the model environments and the D-FINE/RT-DETR revisions. The exploratory 960/640 YOLO26s, short GFL, RTMDet and RT-DETR candidates have no completed comparable result.
+Training and shared profiling used an A100-40GB (YOLO11s started on a laptop RTX 3070 before resuming on Modal). The Modal image definitions pin the model environments and the D-FINE/RT-DETR revisions. We abandoned the 960/640 YOLO26s, short GFL, RTMDet and RT-DETR runs because of compute cost.
 GFL's first reporting attempt failed because shared metrics ran in Modal's Python 3.11 wrapper, while NumPy existed only in its legacy Python 3.10 venv. Added wrapper NumPy/pycocotools/Matplotlib/Pillow with an import smoke check; completed remaining evaluation without retraining. Applied the same fix to the modern-model image.
 
 D-FINE-L resumed from epoch 1 on Modal app `ap-cwesEKfdX7UsLfP0sJUc1C`, with its optimizer, scaler, EMA and scheduler restored. Its separate checkpoint evaluations are documented below.
@@ -39,7 +39,7 @@ Joined saved per-image scores to the frozen COCO annotations by image ID and ver
 - The models are complementary on some images. On `young_deer__28967_1.jpg`, YOLO26s matched all three labels and GFL matched none. On Rucervus frame `UAVSurveyDeer_mp4-0060`, GFL matched five of six and YOLO26s two. Both missed `mississippi_decoy__slide103.jpg`.
 - All 99 empty training frames and all 20 empty test frames come from Mississippi decoys. Current test results give limited evidence about false alarms on empty grassland. Add reviewed empty grass frames and independent dry-field flights with deer or decoys. Preserve capture groups.
 - GFL's 1280 setting fits images into 1280 × 854. A square source can shrink to 854 × 854 while YOLO26s can use 1280 × 1280. Check effective scale as a controlled variable. GFL stopped at epoch 55 before either scheduled LR drop (60 and 80). If rerunning GFL, test a schedule that decays before patience expires, separately from resize.
-- Before retraining, compare the existing YOLO26s weights at full frame versus overlapping tiles, and test operating thresholds on validation. Measure recall, false alarms per frame, and device latency. Use a fresh flight holdout for final evaluation after using this test set to guide development.
+- Compared the saved YOLO26s weights at full frame and with overlapping tiles in the local inference audit below.
 
 Review sheet (green ground-truth boxes): ignored `artifacts/modal_comparison/test_error_examples.jpg`.
 
@@ -77,7 +77,7 @@ Rucervus accounts for 135/154 unmatched boxes at 0.31. Frame 0097 shows misses, 
 
 Ignored artifacts under `artifacts/modal_comparison/yolo26s/` include original prediction JSON, per-frame threshold sweeps, unmatched box CSVs, and the annotated test contact sheet.
 
-### YOLO26s overlapping crop pilot
+### Local YOLO26s inference audit
 
 Ran the saved baseline weights locally on Apple M1 Pro (PyTorch 2.15.0 MPS, Ultralytics 8.4.155, FP32) with Deer v3 BAMBI and Mississippi decoy images (75 validation frames, 84 test frames). Used a nominal size of 1280 in all modes. Compared one full-frame pass, four corner crops each covering 60% of frame width and height, and the union of full-frame and crop predictions. Remapped boxes into original coordinates and merged overlapping boxes at IoU 0.55 in the crop and combined modes. All modes used the shared IoU 0.50 matcher.
 
@@ -89,10 +89,6 @@ Median test inference on the Mac was 72 ms full frame, 286 ms crops, and 362 ms 
 
 Reproduce with `prototyping/deer-v3-comparison/yolo_crop_eval.py --data <Deer-v3-directory> --weights <best.pt> --output <new-directory> --device mps`. Outputs in ignored `artifacts/modal_comparison/yolo26s/crop_eval/` include checkpoint SHA-256, predictions, timings and the confidence sweep. A separate `training_review_queue.csv` samples 96 train-only frames for label review, including 48 BAMBI frames across flights 249–252 (all four from the same brown terrain site), 24 decoy positives and 24 decoy background frames. The queue is for review and does not change the training split.
 
-## Follow-up actions
+## Handoff
 
-1. **Collect and label dry-field footage.** Use several separate flights or sites with deer/decoys, varied altitude, angle and lighting, and verified empty passes. Split by whole flight (prefer a separate site for test). Do not repurpose the current test groups for training.
-2. **Run one short YOLO26s fine-tune from the saved checkpoint.** Choose settings on new validation flights. Compare against the unchanged baseline on a fresh holdout, checking distinct deer found per pass, candidate workload and review time. Retain the original v3 numbers as a historical baseline.
-3. **Measure on the actual Jetson.** Start with full-frame 1280 FP16. Record latency, frame drops and memory on the live video pipeline. Check crops as a second pass only if the added detections justify the time and extra boxes.
-
-These are proposed next experiments; no dry-field retraining or Jetson validation has been completed.
+The training comparison is closed. The saved YOLO26s checkpoint is the proposed flight-test baseline. [Flight-test decision record](../../decisions/0002-yolo26s-flight-baseline.md)
