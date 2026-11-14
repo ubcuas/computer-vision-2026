@@ -1,0 +1,41 @@
+name: Deer experiment checks
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deer-checks.yml'
+      - 'dataloaders/**'
+      - 'prototyping/deer-v3-comparison/**'
+      - 'prototyping/gfl-deer/**'
+      - 'prototyping/yolo-fine-tune/dataset/**'
+  pull_request:
+    paths:
+      - '.github/workflows/deer-checks.yml'
+      - 'dataloaders/**'
+      - 'prototyping/deer-v3-comparison/**'
+      - 'prototyping/gfl-deer/**'
+      - 'prototyping/yolo-fine-tune/dataset/**'
+
+permissions:
+  contents: read
+
+jobs:
+  cpu-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: .:prototyping/gfl-deer
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install CPU test dependencies
+        run: python -m pip install nbformat numpy pillow pycocotools
+      - name: Check pipeline and frozen v3 metadata
+        run: |
+          python -m unittest discover -s prototyping/gfl-deer/tests
+          python prototyping/deer-v3-comparison/check_metadata.py
+          python -m compileall -q prototyping/deer-v3-comparison

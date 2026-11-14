@@ -1,81 +1,77 @@
 {
   "train": {
-    "images": 2902,
-    "boxes": 7542,
+    "images": 3193,
+    "boxes": 9848,
     "negatives": 99,
     "by_source": {
-      "bambi": 831,
-      "young_deer": 1570,
-      "mississippi_decoy": 139,
       "awir": 34,
-      "sherbrooke": 328
+      "bambi": 831,
+      "mississippi_decoy": 139,
+      "rucervus": 291,
+      "sherbrooke": 328,
+      "young_deer": 1570
     },
     "groups_by_source": {
       "awir": 2,
-      "young_deer": 172,
-      "sherbrooke": 1,
       "bambi": 6,
-      "mississippi_decoy": 132
+      "mississippi_decoy": 132,
+      "rucervus": 3,
+      "sherbrooke": 1,
+      "young_deer": 172
     }
   },
   "val": {
-    "images": 276,
-    "boxes": 1123,
+    "images": 358,
+    "boxes": 1436,
     "negatives": 103,
     "by_source": {
-      "bambi": 44,
-      "young_deer": 48,
-      "mississippi_decoy": 31,
       "awir": 6,
-      "sherbrooke": 147
+      "bambi": 44,
+      "mississippi_decoy": 31,
+      "rucervus": 82,
+      "sherbrooke": 147,
+      "young_deer": 48
     },
     "groups_by_source": {
       "awir": 1,
-      "young_deer": 16,
-      "sherbrooke": 1,
       "bambi": 2,
-      "mississippi_decoy": 28
+      "mississippi_decoy": 28,
+      "rucervus": 1,
+      "sherbrooke": 1,
+      "young_deer": 16
     }
   },
   "test": {
-    "images": 157,
-    "boxes": 182,
+    "images": 238,
+    "boxes": 575,
     "negatives": 20,
     "by_source": {
+      "awir": 13,
       "bambi": 56,
-      "young_deer": 60,
       "mississippi_decoy": 28,
-      "awir": 13
+      "rucervus": 81,
+      "young_deer": 60
     },
     "groups_by_source": {
-      "mississippi_decoy": 28,
-      "bambi": 1,
       "awir": 1,
+      "bambi": 1,
+      "mississippi_decoy": 28,
+      "rucervus": 1,
       "young_deer": 20
     }
   },
   "version": "v3",
   "seed": 20261108,
-  "total_images": 3335,
+  "total_images": 3789,
   "group_overlap": "PASS",
   "cross_split_exact_duplicate_check": "PASS",
-  "young_inferred_groups": 533,
-  "selection_exclusions": {
-    "snow_winter_main_dataset_exclusion": 1278,
-    "not_selected": 25722,
-    "dense_canopy_single_frame_or_low_relevance": 57,
-    "person_or_handling_present": 1921,
-    "tiny_or_extreme_box_quality_gate": 2826,
-    "PDF_extraction_fragment": 66
-  },
-  "post_selection_excluded_images": 399,
-  "excluded_images": 32269,
   "known_limitations": [
     "Young Deer grouping inferred, not author provenance",
     "BAMBI test is one location, not a broad independent-site sample",
     "AWIR cross-date same-pen diagnostic",
     "decoy same-field and historical data exposure",
     "Sherbrooke supplied same-enclosure validation can share context",
-    "No exhaustive visual certification of every training box"
+    "No exhaustive visual certification of every training box",
+    "Rucervus scene groups inferred; no verified site separation"
   ]
 }

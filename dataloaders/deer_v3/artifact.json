@@ -1,8 +1,7 @@
 {
   "version": "v3",
   "archive_name": "Deer Training Dataset v3.zip",
-  "archive_bytes": 3981944357,
-  "archive_sha256": "c9010057e4552108704ba378b0e239d2ff3d754fd814dafd4a8cd0f63d52434c",
-  "drive_url": null,
-  "storage_note": "Awaiting Gurnek upload to restricted team Drive. Download once; verify archive hash, extract, then run prepare.py --verify."
+  "archive_bytes": 4002056506,
+  "archive_sha256": "37dcff344fde1b29998ebcc9466772e0fda6e04bc94ddeefb09fc6c1d6eb0372",
+  "storage_note": "Final 3,789-image archive is shared internally. Request access from the CV team; source redistribution permissions are not all confirmed."
 }
