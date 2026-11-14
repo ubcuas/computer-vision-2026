@@ -1,0 +1,12 @@
+{
+  "reviewer": "Codex",
+  "not_human_reviewed": true,
+  "negative_thumbnail_sheets_reviewed": 8,
+  "positive_crop_sheets_reviewed": 7,
+  "boxed_context_sheets_reviewed": 4,
+  "ambiguous_excluded": [
+    "decoy_076"
+  ],
+  "slide_key_mapping": "PDF page index, NOT printed original ID",
+  "near_view_grouping": "SIFT homography; same-site diagnostic only"
+}

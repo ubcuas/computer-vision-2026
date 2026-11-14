@@ -24,3 +24,11 @@ The current focus is Task 1, the Herd Survey: detect and count deer decoys, grou
 - `docs/decisions/`: consequential technical decisions and their rationale.
 
 Large datasets, flight recordings, trained weights, and generated outputs should not be committed directly unless the team adopts an appropriate storage policy.
+
+## GFL prototype
+
+See [GFL baseline notebook and server handoff](prototyping/gfl-deer/BASELINE.md). Training is manually launched; datasets and model outputs remain external.
+
+## Deer v3 comparison
+
+See the [final Modal notebook](prototyping/deer-v3-comparison/Deer_v3_Comparison.ipynb) and [experiment record](docs/experiments/summaries/2026-11-10-deer-v3-modal-comparison.md). The [dataset preparation notes](docs/datasets/deer-v3.md) explain the splits and link to the shared Google Doc and archive.

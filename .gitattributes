@@ -1,0 +1,2 @@
+# The frozen CSV is exported with standard CSV CRLF line endings.
+dataloaders/deer_v3/frozen_manifest.csv whitespace=cr-at-eol

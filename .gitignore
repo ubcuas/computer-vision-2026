@@ -70,3 +70,9 @@ Desktop.ini
 
 # DVC stores large data in its cache; DVC metadata files should remain tracked.
 /.dvc/cache/
+
+# GFL external runtime
+runtime/
+prototyping/gfl-deer/vendor/
+prototyping/gfl-deer/runs/
+*.zip

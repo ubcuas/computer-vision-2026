@@ -1,0 +1,69 @@
+{
+  "train": {
+    "images": 2672,
+    "boxes": 7415,
+    "by_source": {
+      "bambi": 1225,
+      "young_deer": 1000,
+      "mississippi_decoy": 66,
+      "awir": 53,
+      "sherbrooke": 328
+    }
+  },
+  "val": {
+    "images": 863,
+    "boxes": 1509,
+    "by_source": {
+      "bambi": 338,
+      "mississippi_decoy": 13,
+      "sherbrooke": 512
+    }
+  },
+  "test": {
+    "images": 745,
+    "boxes": 1595,
+    "by_source": {
+      "bambi": 732,
+      "mississippi_decoy": 13
+    }
+  },
+  "cross_partition_exact_duplicates_removed": [],
+  "seed": 20261109,
+  "held_out_bambi_training_flights": [
+    "103",
+    "131",
+    "193",
+    "213",
+    "216",
+    "227",
+    "237",
+    "240",
+    "241",
+    "242",
+    "244",
+    "80"
+  ],
+  "excluded_images": 31324,
+  "group_overlap_check": "PASS",
+  "test_scope": "BAMBI held-out flights plus same-site decoy groups; prior decoy dataset exposure disclosed",
+  "limitations": [
+    "Young Deer and AWIR are train-only due insufficient grouping provenance.",
+    "Decoy validation/test are same-site groups previously exposed in older experiments; retrain from official COCO weights and do not claim pristine external test.",
+    "Sherbrooke uses supplied summer partitions; cached training images are positives only.",
+    "Source content and annotation quality not exhaustively human certified.",
+    "Flight IDs do not guarantee different locations or individual deer.",
+    "Cross-source visual duplicate and augmentation-family checks remain required before calling the benchmark leakage-audited.",
+    "BAMBI source val is a single flight; separately report additional flight validation.",
+    "No verified per-flight brown/green/snow stratification yet."
+  ],
+  "split_file_sha256": {
+    "train_decoy_4x.txt": "73a89ece7ce2c2cdcdb33994fad280d39d9bdd714beac5e6ccdf1e43cb6d465f",
+    "val_decoy_same_site_diagnostic.txt": "0599fedc2a0276deb7301797ff7be50cd01c2202073e8245d3c9726b70ebfd30",
+    "train.txt": "d3436abf26aa967e7ccc6fb87dbe2d03e9dde8205ae923c80f323640e5635055",
+    "test.txt": "a195ec3e020c1fed328574ad6cb168f973716e8b6e9de39e36a580a971ddc2ea",
+    "val.txt": "7b4cd8a95f2c2fea266937405ffc2ccca2b4c96d95ce2cbb61b3a105ba69d81e",
+    "val_bambi_source_val.txt": "b45c9f4c40ae1e8b6989691416752751fce715226427f9af6c8a789f8d6184e0",
+    "val_bambi.txt": "c61ebb3317a01060bea26b76b3f9863eee429e5f8ed940634a5a98554ad0c91f",
+    "val_sherbrooke_official.txt": "f1e09e3aef0ffbd5026d95132b735f6b6dc630c24f59ede269b9ce8841c7f79d"
+  }
+}

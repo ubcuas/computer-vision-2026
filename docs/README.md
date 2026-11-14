@@ -57,6 +57,7 @@ The goal is to preserve useful knowledge without turning every investigation int
 
 | Location | What it owns | Read it when | Update it when |
 | --- | --- | --- | --- |
+| `/.github/workflows/deer-checks.yml` | CPU checks for deer experiment code, notebook and frozen dataset metadata | A change affects the checked pipeline, or the CI scope changes |
 | `/.github/pull_request_template.md` | Minimum handoff information for review | Preparing or reviewing a pull request | Reviewers repeatedly need information the template does not request, or a field creates unnecessary friction |
 | `/.github/ISSUE_TEMPLATE/rules-question.yml` | Optional structured intake for consequential competition-rule questions | A rules ambiguity needs shared tracking or organizer follow-up | The information needed to resolve rules questions changes |
 
@@ -97,3 +98,5 @@ Do not create durable documentation for routine command output, step-by-step nar
 ## Adding a new knowledge file
 
 Before adding another document, confirm that its purpose is not already owned by an existing file. Give the new file one clear responsibility, link it from the appropriate index, and add it to this map. Avoid creating empty folders or speculative templates that the team is not yet using.
+
+Current mixed-source detector dataset handoff: [deer-v3.md](datasets/deer-v3.md). Reusable loader and frozen metadata: `dataloaders/deer_v3/`.

@@ -1,0 +1,77 @@
+{
+  "train": {
+    "images": 3193,
+    "boxes": 9848,
+    "negatives": 99,
+    "by_source": {
+      "awir": 34,
+      "bambi": 831,
+      "mississippi_decoy": 139,
+      "rucervus": 291,
+      "sherbrooke": 328,
+      "young_deer": 1570
+    },
+    "groups_by_source": {
+      "awir": 2,
+      "bambi": 6,
+      "mississippi_decoy": 132,
+      "rucervus": 3,
+      "sherbrooke": 1,
+      "young_deer": 172
+    }
+  },
+  "val": {
+    "images": 358,
+    "boxes": 1436,
+    "negatives": 103,
+    "by_source": {
+      "awir": 6,
+      "bambi": 44,
+      "mississippi_decoy": 31,
+      "rucervus": 82,
+      "sherbrooke": 147,
+      "young_deer": 48
+    },
+    "groups_by_source": {
+      "awir": 1,
+      "bambi": 2,
+      "mississippi_decoy": 28,
+      "rucervus": 1,
+      "sherbrooke": 1,
+      "young_deer": 16
+    }
+  },
+  "test": {
+    "images": 238,
+    "boxes": 575,
+    "negatives": 20,
+    "by_source": {
+      "awir": 13,
+      "bambi": 56,
+      "mississippi_decoy": 28,
+      "rucervus": 81,
+      "young_deer": 60
+    },
+    "groups_by_source": {
+      "awir": 1,
+      "bambi": 1,
+      "mississippi_decoy": 28,
+      "rucervus": 1,
+      "young_deer": 20
+    }
+  },
+  "version": "v3",
+  "seed": 20261108,
+  "total_images": 3789,
+  "group_overlap": "PASS",
+  "cross_split_exact_duplicate_check": "PASS",
+  "known_limitations": [
+    "Young Deer grouping inferred, not author provenance",
+    "BAMBI test is one location, not a broad independent-site sample",
+    "AWIR cross-date same-pen diagnostic",
+    "decoy same-field and historical data exposure",
+    "Sherbrooke supplied same-enclosure validation can share context",
+    "No exhaustive visual certification of every training box",
+    "Rucervus scene groups inferred; no verified site separation"
+  ]
+}
