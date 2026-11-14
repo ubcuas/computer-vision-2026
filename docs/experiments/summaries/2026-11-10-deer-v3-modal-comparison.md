@@ -7,6 +7,8 @@
 - Purpose: compare deer detection on a held-out split using shared COCO evaluation and validation-only confidence calibration.
 - Nominal input size 1280. YOLO11s and YOLO26s: 100-epoch limit; GFL X101/DCN: 100 limit, validation AP patience 30, stopped epoch 55, best epoch 25. Official COCO initialization. YOLO11 resumed from the laptop checkpoint; its total timing cannot be inferred from the Modal continuation time.
 
+Read the validation and held-out test tables, annotated misses, and local crop audit in the [final results notebook](../../../prototyping/deer-v3-comparison/Deer_v3_Comparison.ipynb). For the selection and split rationale, see [dataset preparation](../../datasets/deer-v3.md) and the [Deer Data Preparation on Google Docs](https://docs.google.com/document/d/1f6ofkU0H8atJxT8Gj9dldD2-_1Vpz2T3f2wGQT5W2uM/edit) · [Deer Training Dataset v3.zip](https://drive.google.com/file/d/12UtXf_Jfgh9FkDu1e-sWtKCx2sEkzX_s/view?usp=sharing).
+
 | Model | Precision | Recall | F1 | AP50 | AP50–95 |
 | --- | --- | --- | --- | --- | --- |
 | yolo11s | 80.3% | 43.8% | 56.7% | 60.7% | 29.5% |
