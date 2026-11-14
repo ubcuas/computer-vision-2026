@@ -33,6 +33,20 @@ We kept related views together. Young Deer used inferred scene families, BAMBI l
 
 The final archive has **3,789 images**. YOLO and COCO exports represent the same labels. Training decoys get four times the exposure using the training list. Validation and test keep their original counts. This release supersedes the 3,335-image v3 draft.
 
+### Labeled deer boxes by source and split
+
+These are labeled deer boxes in the frozen Deer v3 splits, counted before the 4× training exposure for Mississippi decoy frames.
+
+| Source | Train boxes | Validation boxes | Test boxes |
+|---|---:|---:|---:|
+| Young Deer | 2,206 | 57 | 82 |
+| BAMBI | 2,141 | 78 | 73 |
+| Mississippi decoys | 75 | 15 | 14 |
+| AWIR RGB | 68 | 15 | 13 |
+| Sherbrooke summer | 3,052 | 958 | 0 |
+| Rucervus aerial | 2,306 | 313 | 393 |
+| **Total deer boxes** | **9,848** | **1,436** | **575** |
+
 ## Limits and reproducibility
 
 Competition-like yellow grass remains underrepresented, and the decoys come from one field that was used in earlier experiments. BAMBI test covers one held-out location. AWIR was split across capture dates at the same site. Young Deer validation and test cover 16 and 20 inferred families respectively, and Rucervus lacks verified flight or site IDs. Related frames are not independent. For the original five sources we checked source-to-export geometry, dimensions, classes, bounds and split separation. Rucervus review retained the supplied boxes. The archive README lists sources and attribution. Access belongs with the CV team while redistribution permissions are still being confirmed.
