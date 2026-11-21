@@ -1,6 +1,6 @@
 # YOLO26s small-deer refinement: prepared, not trained
 
-- Status: CPU preparation checked; GPU smoke/training/evaluation not run.
+- Status: prepared and launched on greglinux; final metrics pending.
 - Question: Can training crops and a short low-LR fine-tune improve small-deer recall at a practical human-review workload?
 - Evidence motivating it: [Modal comparison and crop pilot](2026-11-10-deer-v3-modal-comparison.md). The pilot improved one evaluation slice with extra inference passes; this does not establish that training crops will help.
 - Entry points: [notebook and CLI](../../../prototyping/yolo26s-refinement/README.md), [recipe](../../../prototyping/yolo26s-refinement/recipe.json).
@@ -25,4 +25,16 @@ Local ignored preparation: `artifacts/yolo26s_refinement_preflight_v2/`. It cont
 
 The reported VTOL/gimbal/zoom plan increases the importance of oblique and distant views, frame timing, calibration and realistic optical/video conditions. Synthetic crops cannot supply that missing domain coverage. Collect a held-out camera session with dry/green ground, multiple ranges and zoom settings, blur and real negative objects. Do not relabel coyotes as deer or assume they caused most prior errors.
 
-Map interfaces remain a cross-team discussion; no aircraft integration is implemented. Michael's server was not reached because local Tailscale was stopped. No GPU work was launched. Next: review crop preview, restore connectivity, inspect server/GPU availability and run smoke before authorizing the full fine-tune.
+Map interfaces remain a cross-team discussion; no aircraft integration is implemented. The server subsequently became reachable. The GPU had no training processes; the only listed compute client was GNOME remote desktop (~140 MiB), which is explicitly allowed below 256 MiB by the idle check. All other compute processes still block launch.
+
+## Server launch
+
+- Code at launch: `1687177`, branch `experiment/yolo26s-refinement`; separate checkout `/home/mrd/yolo26s_refinement/code`.
+- Data: `/home/mrd/deer-data/Deer Training Dataset v3`; canonical split, COCO and YOLO label hashes verified by preparation. No re-download.
+- Original weights copied to `/home/mrd/yolo26s-deer-v3-best.pt` and checksum verified.
+- Runtime: existing Python environment `/home/mrd/code/computer-vision-2026-v4/.venv/bin/python`, Ultralytics 8.4.155, PyTorch 2.8.0+cu128. Dependencies were not modified.
+- Outputs: `/home/mrd/yolo26s_refinement/run1`; console log `/home/mrd/yolo26s_refinement/pipeline.log`.
+- Detached user service: `deer-yolo26s-refinement-v1.service`. Sequence: smoke → fine-tune → validation and threshold calibration → historical-test regression. Stops on failure; no automatic GPU reset or repeated retries. No other models launched.
+- Launch evidence and final status should be distinguished: service activation alone does not establish a successful run. Final completion requires weights, validation/test reports and `pipeline_complete.json`.
+
+GPU smoke completed successfully and saved best/last checkpoints. Smoke best hash: `418be71ac590627748170b5767e4b8a97600fb1ec76ff8e57edc5f9d4e8bedb0`. The full run was then observed advancing through epoch 1/25 (4,077 steps), with trainer-reported GPU memory about 2.6 GB and no CUDA errors at the handoff check. This is launch validation, not a completed accuracy result. The notebook's defaults point at this deployment and include a read-only console-progress cell; leave its training toggle off while the service is running.
