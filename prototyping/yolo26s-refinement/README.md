@@ -49,3 +49,5 @@ The earlier [crop pilot](../deer-v3-comparison/yolo_crop_eval.py) remains availa
 ## New flight setup
 
 Optical zoom can help distant deer occupy more pixels, but it narrows coverage. We need labelled oblique/distant views and real camera validation, not just stronger synthetic rotation. A gimbal does not guarantee a top-down view. Tag/anomaly models remain separate workstreams; this notebook trains deer detection only.
+
+`launch_server.sh PYTHON DATA RUN WEIGHTS` runs preparation, smoke, training, validation and historical-test regression sequentially. Use it in a detached service and save its console log outside the fresh run directory. It stops on a failure; rerunning explicitly resumes saved training rather than discarding it. Reports and `pipeline_complete.json` mark the end, not merely the final epoch.
