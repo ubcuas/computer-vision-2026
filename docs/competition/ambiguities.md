@@ -19,7 +19,6 @@ This file distinguishes unresolved competition-rule questions from engineering u
 | ENG-002 | Is a fixed camera sufficient, or is gimbal control needed for tag acquisition? | Compare coverage, resolution, motion blur, operational complexity, and available hardware in a representative test. |
 | ENG-003 | How should repeated deer sightings across overlapping images be associated? | Compare geolocation, tracking, image stitching, and mapping approaches using a dataset with surveyed deer locations. |
 | ENG-004 | Which available public datasets are legally usable and visually representative of plastic decoys viewed from the competition UAV? | Complete the dataset register, inspect licenses and distributions, and run comparable baselines. |
-| ENG-006 | What timestamped aircraft/gimbal pose, zoom calibration and ground model will Task 1 expose for distant deer geolocation? | Integration-meeting update suggests zoom survey without RealSense; confirm interfaces and measure surveyed-target error. |
 | ENG-005 | How should missing body parts, clothing or other artifacts, and severe occlusion be represented in training and evaluation? | Define controlled test slices and collect or synthesize representative examples without contaminating the final test set. |
 
 ## Resolution procedure
