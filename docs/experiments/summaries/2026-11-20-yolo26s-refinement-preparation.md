@@ -1,6 +1,6 @@
 # YOLO26s small-deer fine-tune
 
-**Status:** running on greglinux; final accuracy results pending. GPU smoke passed and saved checkpoints. Full training was observed advancing without CUDA errors. This is not evidence of improved accuracy yet.
+**Status (checked 2026-11-21):** failed during epoch 1 at approximately 2,370/4,077 steps with `torch.AcceleratorError: CUDA error: an illegal instruction was encountered`. No full-training epoch checkpoint or results CSV was saved. Only smoke-test weights exist; there are no new accuracy results. Logs and outputs are preserved; no automatic restart was attempted. The GPU still responds to nvidia-smi, but the cause is not established. A full-run checkpoint resume is unavailable; recovery would require an explicitly acknowledged fresh attempt from the original saved deer weights.
 
 **Goal:** improve small-deer recall without flooding the human reviewer with false boxes. Motivation: [the earlier model comparison and crop pilot](2026-11-10-deer-v3-modal-comparison.md).
 
