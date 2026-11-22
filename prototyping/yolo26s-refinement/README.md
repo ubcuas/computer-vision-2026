@@ -2,12 +2,12 @@
 
 [Notebook](YOLO26s_Refinement.ipynb) · [Experiment record](../../docs/experiments/summaries/2026-11-20-yolo26s-refinement-preparation.md) · [Recipe](recipe.json)
 
-The fine-tune is running as `deer-yolo26s-refinement-v1.service` on greglinux. Open the notebook there to view progress; leave `START_TRAINING=False` so it doesn't start another job.
+The first attempt failed before saving an epoch. Recovery is queued as `deer-yolo26s-refinement-recovery-1.service` on greglinux. Open the notebook there to view progress; leave `START_TRAINING=False` so it doesn't start another job.
 
 - Code: `/home/mrd/yolo26s_refinement/code`
 - Data: `/home/mrd/deer-data/Deer Training Dataset v3`
 - Outputs: `/home/mrd/yolo26s_refinement/run1`
-- Log: `/home/mrd/yolo26s_refinement/pipeline.log`
+- Log: `/home/mrd/yolo26s_refinement/recovery-pipeline.log`
 - Python: `/home/mrd/code/computer-vision-2026-v4/.venv/bin/python`
 
 ## Running it again
@@ -23,3 +23,5 @@ Run inside tmux or a detached service. The script prepares crops, smoke-tests, t
 For individual stages, use `run.py prepare --data DATA --run RUN --weights WEIGHTS`, then `smoke`, `train`, and `evaluate` with the same data/run paths. `train --resume` restores the saved optimizer/schedule. `evaluate --test` requires validation calibration first.
 
 Keep the run directory: it contains best/last and epoch weights, configuration, provenance, graphs, prediction JSON, metrics and memory/latency profiles. `pipeline_complete.json` marks completion. We can edit notebook commentary later without retraining. Do not commit datasets or outputs to Git.
+
+Set `DEER_WAIT_FOR_GPU_SECONDS=43200` to queue for up to 12 hours before starting. The queue checks compute processes once a minute and never stops them. Recovery state is recorded next to the run as `run1.queue.json`.

@@ -7,6 +7,9 @@ RUN="${3:?New run directory}"
 WEIGHTS="${4:?Original YOLO26s deer checkpoint}"
 SCRIPT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/run.py"
 export MPLBACKEND=Agg
+if [[ "${DEER_WAIT_FOR_GPU_SECONDS:-0}" -gt 0 ]]; then
+    "$PYTHON" -u "$(dirname -- "$SCRIPT")/wait_for_gpu.py" --seconds "$DEER_WAIT_FOR_GPU_SECONDS" --status "${RUN}.queue.json"
+fi
 if [[ ! -f "$RUN/manifest.json" ]]; then
     "$PYTHON" -u "$SCRIPT" prepare --data "$DATA" --run "$RUN" --weights "$WEIGHTS"
 fi
